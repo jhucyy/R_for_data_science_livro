@@ -3,8 +3,8 @@
 # Carregando os pacotes:
 
 library(tidyverse)
-install.packages("palmerpenguins")
-install.packages("ggthemes")
+# install.packages("palmerpenguins")
+# install.packages("ggthemes")
 library(palmerpenguins)
 library(ggthemes)
 
@@ -287,14 +287,137 @@ geom_point()
  
  # Parei aqui - visualizatin relationships.
  
+ # Para visualizar relacoes precisamos ter pelo menos duas variaveis
+ # mapeadas em um mesmo plot. 
+ 
+ 
+ # um boxplot pode ser usado entre uma variavel categorica e uma
+ # numerica.
+ 
+ # tambem geom_density pode ser usado:
+ 
+ ggplot(penguins, aes(x = body_mass_g, color = species, fill = species)) +
+   geom_density(alpha = 0.5)
+
+  #o argumento shadow e um argumento estetico e coloca a cor 
+ # em efeito de sombra.
+ 
+ 
+ #grafico de barras representam bem a relacao entre duas variaveis
+ # categoricas.
+ 
+ 
+ ggplot(penguins, aes(x = island, fill = species)) +
+   geom_bar(position = "fill")
+ 
+ 
+ # position = "fill" coloca a representatividade dos penguins
+ #  nas ilhas conforme a proporcionalidade.
  
  
  
+ # Scarterplot e o tipo mais comum utilizado para representar 
+ # a relacao entre duas variaveis numericas. 
  
  
+ # incorpor mais variaveis ao grafico ao utilizar os 
+ # argumentos esteticos, cores e formas, color or fill e shape
  
  
+ ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+   geom_point(aes(color = species, shape = island))
  
+ # facet_wrap subdivide a representacao dos dados em pequenos plots
+ # a variavel utilizada em facet_wrap deve ser categorica.
+ 
+ 
+ # The mpg data frame that is bundled with the ggplot2
+ # package contains 234 observations collected by the US
+ # Environmental Protection Agency on 38 car models.
+ # Which variables in mpg are categorical? 
+ #   Which variables are numerical? 
+ #   (Hint: Type ?mpg to read the documentation for the dataset.) 
+ # How can you see this information when you run mpg?
+ # 
+ ?mpg
+glimpse(mpg) 
+ 
+
+# Make a scatterplot of hwy vs. displ using the mpg data frame. 
+# Next, map a third, numerical variable to color,
+# then size, then both color and size, then shape. 
+# How do these aesthetics behave 
+# differently for categorical vs. numerical variables?
+ 
+ggplot(mpg, aes(x = hwy, y = displ))+
+  geom_point(aes(color = cty, size = cyl, shape = class))
+
+
+ #In the scatterplot of hwy vs. displ, 
+# what happens if you map a third variable to linewidth? 
+ 
+ ggplot(mpg, aes(x = hwy, y = displ))+
+   geom_point(linewidth = class)
+
+ # What happens if you map the 
+ # same variable to multiple aesthetics? 
+ 
+ ggplot(mpg, aes(x = hwy, y = displ))+
+   geom_point(aes(shape = class, fill = class, color = class))
+
+ 
+ # Make a scatterplot of bill_depth_mm vs. bill_length_mm and 
+ # color the points by species. What does adding coloring by 
+ # species reveal about the relationship between
+ # these two variables? What about faceting by species?
+ # 
+ 
+ 
+ ggplot(penguins, aes(x = bill_depth_mm, y = bill_length_mm))+
+   geom_point(aes(color = species))+
+   facet_wrap(~ species)
+
+ # Why does the following yield two separate legends? 
+ #   How would you fix it to combine the two legends? 
+ 
+ 
+ ggplot(
+   data = penguins,
+   mapping = aes(
+     x = bill_length_mm, y = bill_depth_mm, 
+     color = species, shape = species
+   )
+ ) +
+   geom_point() +
+   labs(color = "species")
+
+ 
+ # Create the two following stacked bar plots. 
+ # Which question can you answer with the first one? 
+ #   Which question can you answer with the second one?
+ 
+ 
+ ggplot(penguins, aes(x = island, fill = species)) +
+   geom_bar(position = "fill")
+
+ 
+  ggplot(penguins, aes(x = species, fill = island)) +
+   geom_bar(position = "fill")
+
+
+# Salvando o plot ---------------------------------------------------------
+
+  ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+    geom_point()
+  ggsave(filename = "penguin-plot.png")   
+
+  
+  
+
+  
+  
+   
+  
  
  
  
