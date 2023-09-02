@@ -114,8 +114,90 @@ flights |>
 flights |> 
   arrange(distance)
   
-# https://r4ds.hadley.nz/data-transform
-# parei em coluns 4.3
+
+# Colunas -----------------------------------------------------------------
+
+# As principais funcoes para manipular colunas, sao
+# mutate ()
+# select ()
+# rename () - janitor::clean_names()
+# relocate () realoca as colunas para outras posicoes.
+# por configucao padrao, relocate move as variaveis para o 
+# inicio do dataset.
+
+
+# Exercicios --------------------------------------------------------------
+
+# Compare dep_time, sched_dep_time, and dep_delay. 
+# How would you expect those three numbers to be related?
+
+flights |> 
+  select(dep_time, sched_dep_time, dep_delay)
+
+# Brainstorm as many ways as possible to select dep_time, 
+# dep_delay, arr_time, and arr_delay from flights.
+
+flights |> 
+  select(starts_with(c("dep", "arr")))
+
+
+flights |> 
+  select(ends_with(c("time", "delay")))
+
+
+flights |> 
+  select(contains(c("delay", "time")))
+
+
+# What happens if you specify the name of the
+# same variable multiple times in a select() call?
+flights |> 
+  select(dep_time, dep_time, dep_time)
+# so seleciona uma vez.
+
+# What does the any_of() function do? 
+#   Why might it be helpful 
+# in conjunction with this vector?
+
+
+variables <- c("year", "month", "day", "dep_delay", "arr_delay")
+
+flights |> 
+  select(any_of(variables))
+
+
+# Does the result of running the following code surprise you? 
+#   How do the select helpers deal with upper and
+# lower case by default? How can you change that default?
+
+flights |> select(contains("TIME"))
+
+flights |> select(ends_with("Time"))
+
+# os selecionadores especificos ignoram a regra do r de ser 
+# case sensitive. Isto pode ser util na selecao de datasets.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
