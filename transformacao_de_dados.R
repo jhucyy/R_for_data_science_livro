@@ -178,6 +178,172 @@ flights |> select(ends_with("Time"))
 # case sensitive. Isto pode ser util na selecao de datasets.
 
 
+# 
+# Rename air_time to air_time_min to indicate units of 
+# measurement and move it to the beginning of the data frame.
+
+flights |> 
+  mutate(air_time_min = air_time, .before = 1)
+
+
+# Why doesn’t the following work,
+# and what does the error mean?
+
+flights |> 
+  select(tailnum) |> 
+  arrange(arr_delay)
+#> Error in `arrange()`:
+#> ℹ In argument: `..1 = arr_delay`.
+#> Caused by error:
+#> ! object 'arr_delay' not found
+#> O erro ocorre porque ao selecionar, a variavel tailnum
+#> todas as outras variaveis são descartadas.
+
+
+
+
+# group_by
+# agrupa os dados em grupos significativos.
+
+flights |> 
+  group_by(month) |> 
+  count()
+
+
+
+# Which carrier has the worst average delays? 
+#   Challenge: can you disentangle the effects 
+# of bad airports vs. bad carriers? 
+# Why/why not? (Hint: think about 
+# flights |> group_by(carrier, dest) |> summarize(n()))
+
+flights |> 
+  group_by(carrier, dest) |> 
+  summarize(delay_mean = mean(dep_delay, na.rm = TRUE),
+            n = n ()) |> 
+  arrange(desc(delay_mean))
+  
+
+
+# Find the flights that are most delayed 
+# upon departure from each destination.
+
+flights |> 
+  group_by(dest) |> 
+  summarize(mean_delay = mean(dep_delay, na.rm = TRUE,
+                              n = n())) |> 
+  arrange(desc(mean_delay))
+
+
+# 
+# How do delays vary over the course of the day. 
+# Illustrate your answer with a plot.
+
+flights |> 
+  group_by(day) |> 
+  summarise(mean_delay = mean(dep_delay, na.rm = T)) |> 
+  ggplot(aes(x = mean_delay, y = day)) +
+  geom_point() + geom_line()
+
+# Explain what count() does in terms of the dplyr
+# verbs you just learned. 
+# What does the sort argument to count() do?
+
+# Conta todas as ocorrencias daquele agrupamento de dados e 
+# fornece um unico numero.
+
+
+# Suppose we have the following tiny data frame:
+
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+
+
+# Write down what you think the output will look like, 
+# then check if you were correct,
+# and describe what group_by() does.
+
+# group_by(y) - ira mostrar o agrupamento de a = 3 e b = 2
+
+df |>
+  group_by(y) |> 
+  count()
+
+
+
+# Write down what you think the output will look like, 
+# then check if you were correct, and describe what arrange() does. Also comment on how it’s
+# different from the group_by() in part (a)?
+df |>
+  arrange(y)
+
+
+# arrange nao altera o valor das observacoes, apenas reordena
+# as linhas, by default do menor para o maior
+
+df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+
+
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+
+
+
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x), .groups = "drop")
+
+
+
+
+
+
+
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
